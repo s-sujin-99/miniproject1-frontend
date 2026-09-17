@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { Geist_Mono } from 'next/font/google';
+import Link from 'next/link';
 import './globals.css';
 import { Providers } from './providers';
+import { LocationIndicator } from '@/components/location-indicator';
+import { UserMenu } from '@/components/user-menu';
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
@@ -22,7 +25,15 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <Providers>
           <header className="border-b">
             <div className="mx-auto flex max-w-5xl flex-col gap-1 px-4 py-3">
-              <span className="text-lg font-semibold">약값알림</span>
+              <div className="flex items-center justify-between gap-2">
+                <Link href="/" className="text-lg font-semibold">
+                  약값알림
+                </Link>
+                <div className="flex items-center gap-3">
+                  <LocationIndicator />
+                  <UserMenu />
+                </div>
+              </div>
               <p className="text-muted-foreground text-xs">{NOTICE_TEXT}</p>
             </div>
           </header>
