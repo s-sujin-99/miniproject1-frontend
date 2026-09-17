@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { LocateFixed, MapPin, X } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import { formatDistance } from '@/lib/format';
+import { cn } from '@/lib/utils';
 import type { PageResponse } from '@/types/api';
 import type { PharmacyPickResult } from '@/types/report';
 
@@ -21,6 +22,7 @@ export function PharmacyPicker({ value, onChange }: PharmacyPickerProps) {
   const [inputValue, setInputValue] = useState('');
   const [debouncedValue, setDebouncedValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const [nearby, setNearby] = useState<PharmacyPickResult[] | null>(null);
   const [nearbyLoading, setNearbyLoading] = useState(false);
   const [nearbyError, setNearbyError] = useState<string | null>(null);
@@ -44,12 +46,45 @@ export function PharmacyPicker({ value, onChange }: PharmacyPickerProps) {
   const isDebouncePending = inputValue.trim() !== debouncedValue;
   const isLoading = debouncedValue.length > 0 && (isDebouncePending || isFetching);
 
+  // DrugAutocomplete(drug-autocomplete.tsx)와 같은 렌더 단계 리셋 패턴 — 새 검색어의 결과가
+  // 오면 activeIndex를 깜빡임 없이 같은 커밋에서 초기화한다.
+  const [activeIndexResetKey, setActiveIndexResetKey] = useState(debouncedValue);
+  if (activeIndexResetKey !== debouncedValue) {
+    setActiveIndexResetKey(debouncedValue);
+    setActiveIndex(-1);
+  }
+
   function select(pharmacy: PharmacyPickResult) {
     onChange(pharmacy);
     setInputValue('');
     setDebouncedValue('');
     setIsOpen(false);
+    setActiveIndex(-1);
     setNearby(null);
+  }
+
+  // 검색 결과 목록이 <li onClick>만 있으면 키보드 사용자는 약국을 고를 수 없다 —
+  // DrugAutocomplete와 동일하게 방향키/Enter/Escape를 지원한다(ROADMAP T-36 키보드 완주 기준).
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (!isOpen) return;
+    if (e.key === 'Escape') {
+      setIsOpen(false);
+      setActiveIndex(-1);
+      return;
+    }
+    if (options.length === 0) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % options.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex((i) => (i <= 0 ? options.length - 1 : i - 1));
+    } else if (e.key === 'Enter') {
+      if (activeIndex >= 0) {
+        e.preventDefault();
+        select(options[activeIndex]);
+      }
+    }
   }
 
   // "지도에서 고르기" 대신 내 위치 반경 2km 약국을 가까운 순 목록으로 보여준다.
@@ -111,6 +146,9 @@ export function PharmacyPicker({ value, onChange }: PharmacyPickerProps) {
           aria-expanded={isOpen && inputValue.trim().length > 0}
           aria-controls={listboxId}
           aria-autocomplete="list"
+          aria-activedescendant={
+            activeIndex >= 0 ? `${listboxId}-option-${options[activeIndex].id}` : undefined
+          }
           autoComplete="off"
           className="border-input bg-background focus-visible:ring-ring/50 h-11 w-full rounded-lg border px-4 text-sm outline-none focus-visible:ring-3"
           placeholder="약국 이름으로 검색"
@@ -121,6 +159,7 @@ export function PharmacyPicker({ value, onChange }: PharmacyPickerProps) {
           }}
           onFocus={() => setIsOpen(true)}
           onBlur={() => setIsOpen(false)}
+          onKeyDown={handleKeyDown}
         />
 
         {isOpen && inputValue.trim().length > 0 && (
@@ -134,12 +173,16 @@ export function PharmacyPicker({ value, onChange }: PharmacyPickerProps) {
             ) : options.length === 0 ? (
               <li className="text-muted-foreground px-4 py-3 text-sm">검색 결과가 없습니다.</li>
             ) : (
-              options.map((pharmacy) => (
+              options.map((pharmacy, index) => (
                 <li
                   key={pharmacy.id}
+                  id={`${listboxId}-option-${pharmacy.id}`}
                   role="option"
-                  aria-selected={false}
-                  className="hover:bg-muted cursor-pointer px-4 py-2.5 text-sm"
+                  aria-selected={index === activeIndex}
+                  className={cn(
+                    'cursor-pointer px-4 py-2.5 text-sm',
+                    index === activeIndex ? 'bg-accent text-accent-foreground' : 'hover:bg-muted',
+                  )}
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => select(pharmacy)}
                 >
@@ -173,20 +216,22 @@ export function PharmacyPicker({ value, onChange }: PharmacyPickerProps) {
             </li>
           ) : (
             nearby.map((pharmacy) => (
-              <li
-                key={pharmacy.id}
-                className="hover:bg-muted flex cursor-pointer items-center justify-between gap-2 px-4 py-2.5 text-sm"
-                onClick={() => select(pharmacy)}
-              >
-                <span className="flex items-center gap-1.5 font-medium">
-                  <MapPin className="text-muted-foreground size-3.5 shrink-0" />
-                  {pharmacy.name}
-                </span>
-                {pharmacy.distanceM != null && (
-                  <span className="text-muted-foreground shrink-0 text-xs">
-                    {formatDistance(pharmacy.distanceM)}
+              <li key={pharmacy.id}>
+                <button
+                  type="button"
+                  onClick={() => select(pharmacy)}
+                  className="hover:bg-muted focus-visible:bg-muted flex w-full items-center justify-between gap-2 px-4 py-2.5 text-left text-sm outline-none"
+                >
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <MapPin className="text-muted-foreground size-3.5 shrink-0" />
+                    {pharmacy.name}
                   </span>
-                )}
+                  {pharmacy.distanceM != null && (
+                    <span className="text-muted-foreground shrink-0 text-xs">
+                      {formatDistance(pharmacy.distanceM)}
+                    </span>
+                  )}
+                </button>
               </li>
             ))
           )}

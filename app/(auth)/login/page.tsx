@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import { ApiError } from '@/lib/api';
+import { getErrorMessage } from '@/lib/error-message';
 import { Button } from '@/components/ui/button';
 
 // 비밀번호 규칙은 백엔드 SignupRequest(@Size(min=6, max=64))와 맞춘다(shrimp-rules §5.2).
@@ -37,7 +37,7 @@ function LoginForm() {
       router.push(searchParams.get('redirect') || '/');
     } catch (e) {
       // 백엔드가 잘못된 이메일/비밀번호를 구분하지 않고 동일한 메시지로 응답한다(shrimp-rules §5.1).
-      setServerError(e instanceof ApiError ? e.message : '로그인에 실패했습니다.');
+      setServerError(getErrorMessage(e));
     }
   }
 
@@ -56,10 +56,16 @@ function LoginForm() {
             id="email"
             type="email"
             autoComplete="email"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? 'email-error' : undefined}
             className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('email')}
           />
-          {errors.email && <p className="text-destructive text-xs">{errors.email.message}</p>}
+          {errors.email && (
+            <p id="email-error" className="text-destructive text-xs">
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
@@ -70,13 +76,23 @@ function LoginForm() {
             id="password"
             type="password"
             autoComplete="current-password"
+            aria-invalid={!!errors.password}
+            aria-describedby={errors.password ? 'password-error' : undefined}
             className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('password')}
           />
-          {errors.password && <p className="text-destructive text-xs">{errors.password.message}</p>}
+          {errors.password && (
+            <p id="password-error" className="text-destructive text-xs">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
-        {serverError && <p className="text-destructive text-sm">{serverError}</p>}
+        {serverError && (
+          <p role="alert" className="text-destructive text-sm">
+            {serverError}
+          </p>
+        )}
 
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? '로그인 중...' : '로그인'}

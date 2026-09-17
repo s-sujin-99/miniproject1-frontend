@@ -11,7 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { DrugAutocomplete } from '@/components/drug-autocomplete';
 import { PharmacyPicker } from '@/components/pharmacy-picker';
-import { ApiError, apiFetch } from '@/lib/api';
+import { apiFetch } from '@/lib/api';
+import { getErrorMessage } from '@/lib/error-message';
 import { formatThousands } from '@/lib/format';
 import type { DrugSummary } from '@/types/drug';
 import type { PharmacyDetail } from '@/types/pharmacy';
@@ -128,7 +129,7 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
       setReceiptFileId(res.id);
       setReceiptFileName(file.name);
     } catch (err) {
-      setUploadError(err instanceof ApiError ? err.message : '영수증 업로드에 실패했습니다.');
+      setUploadError(getErrorMessage(err));
     } finally {
       setUploading(false);
     }
@@ -175,9 +176,7 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
         router.push(`/pharmacies/${res.pharmacyId}?reported=1`);
       }
     } catch (e) {
-      setServerError(
-        e instanceof ApiError ? e.message : '제보에 실패했습니다. 잠시 후 다시 시도해주세요.',
-      );
+      setServerError(getErrorMessage(e));
     }
   }
 
@@ -193,7 +192,11 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
               if (p) setPharmacyError(null);
             }}
           />
-          {pharmacyError && <p className="text-destructive text-xs">{pharmacyError}</p>}
+          {pharmacyError && (
+            <p id="pharmacy-error" role="alert" className="text-destructive text-xs">
+              {pharmacyError}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -221,7 +224,11 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
               }}
             />
           )}
-          {drugError && <p className="text-destructive text-xs">{drugError}</p>}
+          {drugError && (
+            <p id="drug-error" role="alert" className="text-destructive text-xs">
+              {drugError}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -239,6 +246,7 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
                   inputMode="numeric"
                   placeholder="예: 2,800"
                   aria-invalid={!!errors.price}
+                  aria-describedby={errors.price ? 'price-error' : undefined}
                   className="border-input bg-background focus-visible:ring-ring/50 h-11 w-full rounded-lg border px-4 pr-8 text-sm outline-none focus-visible:ring-3 aria-invalid:border-destructive"
                   value={field.value}
                   onBlur={field.onBlur}
@@ -258,7 +266,11 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
               </div>
             )}
           />
-          {errors.price && <p className="text-destructive text-xs">{errors.price.message}</p>}
+          {errors.price && (
+            <p id="price-error" className="text-destructive text-xs">
+              {errors.price.message}
+            </p>
+          )}
         </div>
 
         <details className="border-border rounded-lg border">
@@ -278,16 +290,21 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
                 min={minPurchasedAtIso()}
                 max={todayIso()}
                 aria-invalid={!!errors.purchasedAt}
+                aria-describedby={errors.purchasedAt ? 'purchasedAt-error' : undefined}
                 className="border-input bg-background focus-visible:ring-ring/50 h-9 rounded-md border px-3 text-sm outline-none focus-visible:ring-3 aria-invalid:border-destructive"
                 {...register('purchasedAt')}
               />
               {errors.purchasedAt && (
-                <p className="text-destructive text-xs">{errors.purchasedAt.message}</p>
+                <p id="purchasedAt-error" className="text-destructive text-xs">
+                  {errors.purchasedAt.message}
+                </p>
               )}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium">영수증 사진</span>
+              <label htmlFor="receipt-file" className="text-sm font-medium">
+                영수증 사진
+              </label>
               {receiptFileName ? (
                 <div className="border-input bg-muted/30 flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-sm">
                   <span className="flex min-w-0 items-center gap-1.5">
@@ -305,15 +322,21 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
                 </div>
               ) : (
                 <input
+                  id="receipt-file"
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
                   disabled={uploading}
                   onChange={handleReceiptChange}
+                  aria-describedby={uploadError ? 'receipt-error' : undefined}
                   className="text-muted-foreground text-sm file:mr-3 file:rounded-md file:border-0 file:bg-secondary file:px-3 file:py-1.5 file:text-secondary-foreground"
                 />
               )}
               {uploading && <p className="text-muted-foreground text-xs">업로드 중...</p>}
-              {uploadError && <p className="text-destructive text-xs">{uploadError}</p>}
+              {uploadError && (
+                <p id="receipt-error" role="alert" className="text-destructive text-xs">
+                  {uploadError}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -325,15 +348,25 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
                 rows={2}
                 maxLength={200}
                 placeholder="예: 1+1 행사 아님, 정가"
+                aria-invalid={!!errors.memo}
+                aria-describedby={errors.memo ? 'memo-error' : undefined}
                 className="border-input bg-background focus-visible:ring-ring/50 resize-none rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-3"
                 {...register('memo')}
               />
-              {errors.memo && <p className="text-destructive text-xs">{errors.memo.message}</p>}
+              {errors.memo && (
+                <p id="memo-error" className="text-destructive text-xs">
+                  {errors.memo.message}
+                </p>
+              )}
             </div>
           </div>
         </details>
 
-        {serverError && <p className="text-destructive text-sm">{serverError}</p>}
+        {serverError && (
+          <p role="alert" className="text-destructive text-sm">
+            {serverError}
+          </p>
+        )}
 
         <Button type="submit" size="lg" disabled={isSubmitting || uploading}>
           {isSubmitting ? '제보하는 중...' : '가격 제보하기'}

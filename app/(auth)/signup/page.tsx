@@ -6,7 +6,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
-import { apiFetch, ApiError } from '@/lib/api';
+import { apiFetch } from '@/lib/api';
+import { getErrorMessage } from '@/lib/error-message';
 import { Button } from '@/components/ui/button';
 
 // 백엔드 SignupRequest와 동일한 규칙(shrimp-rules §5.2): 비밀번호 6~64자, 닉네임 2~30자.
@@ -44,7 +45,7 @@ export default function SignupPage() {
       });
       router.push('/login');
     } catch (e) {
-      setServerError(e instanceof ApiError ? e.message : '회원가입에 실패했습니다.');
+      setServerError(getErrorMessage(e));
     }
   }
 
@@ -61,10 +62,16 @@ export default function SignupPage() {
             id="email"
             type="email"
             autoComplete="email"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? 'email-error' : undefined}
             className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('email')}
           />
-          {errors.email && <p className="text-destructive text-xs">{errors.email.message}</p>}
+          {errors.email && (
+            <p id="email-error" className="text-destructive text-xs">
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
@@ -75,10 +82,16 @@ export default function SignupPage() {
             id="nickname"
             type="text"
             autoComplete="nickname"
+            aria-invalid={!!errors.nickname}
+            aria-describedby={errors.nickname ? 'nickname-error' : undefined}
             className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('nickname')}
           />
-          {errors.nickname && <p className="text-destructive text-xs">{errors.nickname.message}</p>}
+          {errors.nickname && (
+            <p id="nickname-error" className="text-destructive text-xs">
+              {errors.nickname.message}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
@@ -89,13 +102,23 @@ export default function SignupPage() {
             id="password"
             type="password"
             autoComplete="new-password"
+            aria-invalid={!!errors.password}
+            aria-describedby={errors.password ? 'password-error' : undefined}
             className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('password')}
           />
-          {errors.password && <p className="text-destructive text-xs">{errors.password.message}</p>}
+          {errors.password && (
+            <p id="password-error" className="text-destructive text-xs">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
-        {serverError && <p className="text-destructive text-sm">{serverError}</p>}
+        {serverError && (
+          <p role="alert" className="text-destructive text-sm">
+            {serverError}
+          </p>
+        )}
 
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? '가입 중...' : '회원가입'}

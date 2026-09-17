@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { ErrorPanel } from '@/components/error-panel';
 import { PharmacyDrugTable } from '@/components/pharmacy-drug-table';
 import { ReportSuccessBanner } from '@/components/report-success-banner';
-import { ApiError, apiFetch } from '@/lib/api';
+import { apiFetch } from '@/lib/api';
+import { getErrorMessage } from '@/lib/error-message';
 import { formatDistance } from '@/lib/format';
 import type { BusinessHours, PharmacyDetail } from '@/types/pharmacy';
 
@@ -51,8 +52,7 @@ export default async function PharmacyDetailPage({ params }: { params: Promise<{
       cache: 'no-store',
     });
   } catch (e) {
-    const message = e instanceof ApiError ? e.message : '약국 정보를 불러오지 못했습니다.';
-    return <ErrorPanel title="약국 정보를 불러오지 못했습니다" description={message} />;
+    return <ErrorPanel title="약국 정보를 불러오지 못했습니다" description={getErrorMessage(e)} />;
   }
 
   const kakaoMapUrl = `https://map.kakao.com/link/to/${encodeURIComponent(pharmacy.name)},${pharmacy.lat},${pharmacy.lng}`;

@@ -5,7 +5,8 @@ import { ErrorPanel } from '@/components/error-panel';
 import { SearchMapPanel } from '@/components/search-map-panel';
 import { SearchResults } from '@/components/search-results';
 import { SortToggle } from '@/components/sort-toggle';
-import { ApiError, apiFetch } from '@/lib/api';
+import { apiFetch } from '@/lib/api';
+import { getErrorMessage } from '@/lib/error-message';
 import { formatDistance, formatPrice } from '@/lib/format';
 import { PharmacySearchProvider } from '@/lib/pharmacy-search-context';
 import { buildSearchUrl } from '@/lib/search-url';
@@ -60,8 +61,7 @@ export default async function SearchPage({
       cache: 'no-store',
     });
   } catch (e) {
-    const message = e instanceof ApiError ? e.message : '검색 중 오류가 발생했습니다.';
-    return <ErrorPanel title="검색에 실패했습니다" description={message} />;
+    return <ErrorPanel title="검색에 실패했습니다" description={getErrorMessage(e)} />;
   }
 
   const { drug, summary, dataSource, results, suggestion } = data;

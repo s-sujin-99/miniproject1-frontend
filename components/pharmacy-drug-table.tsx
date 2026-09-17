@@ -77,8 +77,15 @@ export function PharmacyDrugTable({
             return (
               <Fragment key={drug.drugId}>
                 <tr
-                  className="hover:bg-muted/50 cursor-pointer border-b last:border-b-0"
+                  className="hover:bg-muted/50 focus-visible:ring-ring/50 cursor-pointer border-b outline-none -outline-offset-2 last:border-b-0 focus-visible:ring-3"
                   onClick={() => setExpandedDrugId(expanded ? null : drug.drugId)}
+                  onKeyDown={(e) => {
+                    if (e.key !== 'Enter' && e.key !== ' ') return;
+                    e.preventDefault();
+                    setExpandedDrugId(expanded ? null : drug.drugId);
+                  }}
+                  role="button"
+                  tabIndex={0}
                   aria-expanded={expanded}
                 >
                   <td className="px-3 py-2">
