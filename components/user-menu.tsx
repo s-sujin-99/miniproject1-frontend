@@ -20,6 +20,11 @@ export function UserMenu() {
 
   return (
     <div className="flex items-center gap-2 text-sm">
+      {user.role === 'ADMIN' && (
+        <Link href="/admin" className="text-muted-foreground hover:text-foreground">
+          관리자
+        </Link>
+      )}
       <Link href="/me" className="text-muted-foreground hover:text-foreground">
         {user.nickname}님
       </Link>
