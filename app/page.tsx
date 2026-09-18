@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DrugAutocomplete } from '@/components/drug-autocomplete';
+import { RecentReportsFeed } from '@/components/recent-reports-feed';
 import { getResolvedCoordinates, useUserLocation } from '@/hooks/use-user-location';
 import type { DrugSummary } from '@/types/drug';
 
@@ -59,30 +60,46 @@ export default function Home() {
   }, [state, isPickerOpen, pendingDrug, router]);
 
   return (
-    <div className="mx-auto flex max-w-xl flex-col items-center gap-8 px-4 py-20">
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-semibold">약 이름으로 최저가를 찾아보세요</h1>
+    <div className="mx-auto flex max-w-xl flex-col items-center gap-8 px-4 py-16 sm:py-24">
+      <div className="animate-in fade-in slide-in-from-bottom-4 flex flex-col items-center gap-3 text-center duration-700 ease-out">
+        <h1 className="text-foreground text-3xl leading-tight font-black tracking-tight text-balance sm:text-4xl">
+          약 이름으로
+          <br />
+          최저가를 찾아보세요
+        </h1>
         <p className="text-muted-foreground text-sm">주변 약국의 실제 판매가를 비교해드려요</p>
       </div>
 
-      <div className="w-full" key={quickQuery}>
+      <div
+        className="animate-in fade-in slide-in-from-bottom-3 w-full duration-700 ease-out [animation-delay:150ms] [animation-fill-mode:backwards]"
+        key={quickQuery}
+      >
         <DrugAutocomplete onSelect={goToSearch} initialQuery={quickQuery} autoFocus />
       </div>
 
       <div className="flex flex-wrap justify-center gap-2">
-        {POPULAR_DRUGS.map((name) => (
+        {POPULAR_DRUGS.map((name, i) => (
           <button
             key={name}
             type="button"
             onClick={() => setQuickQuery(name)}
-            className="border-border bg-background hover:bg-muted rounded-full border px-3 py-1.5 text-sm transition-colors"
+            style={{ animationDelay: `${300 + i * 60}ms` }}
+            className="animate-in fade-in slide-in-from-bottom-2 bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-full px-3 py-1.5 text-sm font-medium duration-500 ease-out [animation-fill-mode:backwards] hover:scale-105 active:scale-95 transition-[background-color,color,transform]"
           >
             {name}
           </button>
         ))}
       </div>
 
-      {pendingDrug && <p className="text-muted-foreground text-xs">위치를 확인하는 중입니다...</p>}
+      {pendingDrug && (
+        <p className="price text-muted-foreground animate-pulse text-xs">
+          위치를 확인하는 중입니다...
+        </p>
+      )}
+
+      <div className="animate-in fade-in w-full duration-700 ease-out [animation-delay:450ms] [animation-fill-mode:backwards]">
+        <RecentReportsFeed />
+      </div>
     </div>
   );
 }
