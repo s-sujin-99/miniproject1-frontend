@@ -23,24 +23,24 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html lang="ko" className={`${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <Providers>
-          <header className="border-b">
-            <div className="mx-auto flex max-w-5xl flex-col gap-1 px-4 py-3">
-              <div className="flex items-center justify-between gap-2">
-                <Link href="/" className="text-lg font-semibold">
-                  약값알림
-                </Link>
-                <div className="flex items-center gap-3">
-                  <LocationIndicator />
-                  <UserMenu />
-                </div>
+          <header className="bg-background border-border sticky top-0 z-20 border-b">
+            <div className="relative mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-2 gap-y-1 px-6 py-4">
+              <Link
+                href="/"
+                className="text-foreground shrink-0 text-xl font-black tracking-tight whitespace-nowrap"
+              >
+                약값알림
+              </Link>
+              <div className="flex shrink-0 items-center gap-3">
+                <LocationIndicator />
+                <UserMenu />
               </div>
-              <p className="text-muted-foreground text-xs">{NOTICE_TEXT}</p>
             </div>
           </header>
-          <main className="flex-1">{children}</main>
-          <footer className="border-t">
-            <div className="mx-auto max-w-5xl px-4 py-3">
-              <p className="text-muted-foreground text-xs">{NOTICE_TEXT}</p>
+          <main className="flex flex-1 flex-col">{children}</main>
+          <footer className="border-border bg-background border-t">
+            <div className="px-6 py-3">
+              <p className="text-muted-foreground font-mono text-[0.7rem]">{NOTICE_TEXT}</p>
             </div>
           </footer>
         </Providers>
