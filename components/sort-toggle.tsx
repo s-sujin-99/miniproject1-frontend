@@ -23,18 +23,18 @@ export function SortToggle({ current }: { current: SearchUrlParams }) {
   const router = useRouter();
 
   return (
-    <div className="bg-background sticky top-0 z-10 flex flex-wrap items-center gap-x-4 gap-y-2 border-b pb-3">
-      <div className="flex flex-wrap gap-1">
+    <div className="bg-background border-border sticky top-0 z-10 flex flex-wrap items-center gap-x-4 gap-y-2 border-b pb-3">
+      <div className="flex gap-4">
         {SORT_OPTIONS.map((opt) => (
           <button
             key={opt.value}
             type="button"
             onClick={() => router.push(buildSearchUrl(current, { sort: opt.value }))}
             className={cn(
-              'rounded-full px-3 py-1.5 text-sm transition-colors',
+              'border-b-2 pb-1 text-sm font-bold transition-colors',
               current.sort === opt.value
-                ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:bg-muted',
+                ? 'border-foreground text-foreground'
+                : 'text-muted-foreground border-transparent hover:text-foreground',
             )}
             aria-pressed={current.sort === opt.value}
           >
@@ -49,9 +49,9 @@ export function SortToggle({ current }: { current: SearchUrlParams }) {
             type="button"
             onClick={() => router.push(buildSearchUrl(current, { radius: opt.value }))}
             className={cn(
-              'rounded-full border px-3 py-1.5 text-sm transition-colors',
+              'price border px-3 py-1.5 text-sm transition-colors',
               current.radius === opt.value
-                ? 'border-primary text-primary'
+                ? 'bg-foreground text-background border-foreground'
                 : 'border-border text-muted-foreground hover:bg-muted',
             )}
             aria-pressed={current.radius === opt.value}

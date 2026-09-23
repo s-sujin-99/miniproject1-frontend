@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { getErrorMessage } from '@/lib/error-message';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 // 비밀번호 규칙은 백엔드 SignupRequest(@Size(min=6, max=64))와 맞춘다(shrimp-rules §5.2).
 const loginSchema = z.object({
@@ -45,20 +46,22 @@ function LoginForm() {
 
   return (
     <>
-      <h1 className="text-xl font-semibold">로그인</h1>
+      <div>
+        <p className="text-muted-foreground font-mono text-xs tracking-[0.2em]">WELCOME BACK</p>
+        <h1 className="text-foreground mt-1 text-3xl font-black tracking-tight">로그인</h1>
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
-          <label htmlFor="email" className="text-sm font-medium">
+          <label htmlFor="email" className="text-foreground text-xs font-bold tracking-wide">
             이메일
           </label>
-          <input
+          <Input
             id="email"
             type="email"
             autoComplete="email"
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? 'email-error' : undefined}
-            className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('email')}
           />
           {errors.email && (
@@ -69,16 +72,15 @@ function LoginForm() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="password" className="text-sm font-medium">
+          <label htmlFor="password" className="text-foreground text-xs font-bold tracking-wide">
             비밀번호
           </label>
-          <input
+          <Input
             id="password"
             type="password"
             autoComplete="current-password"
             aria-invalid={!!errors.password}
             aria-describedby={errors.password ? 'password-error' : undefined}
-            className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('password')}
           />
           {errors.password && (
@@ -102,7 +104,7 @@ function LoginForm() {
       {apiBaseUrl && (
         <a
           href={`${apiBaseUrl}/oauth2/authorization/google`}
-          className="border-input bg-background hover:bg-muted flex h-9 items-center justify-center rounded-md border text-sm transition-colors"
+          className="border-border bg-background hover:bg-muted flex h-11 items-center justify-center border text-sm font-medium transition-colors"
         >
           Google로 로그인
         </a>
@@ -110,7 +112,7 @@ function LoginForm() {
 
       <p className="text-muted-foreground text-center text-sm">
         계정이 없으신가요?{' '}
-        <Link href="/signup" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/signup" className="text-foreground font-bold underline underline-offset-4">
           회원가입
         </Link>
       </p>

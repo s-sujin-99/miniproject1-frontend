@@ -10,14 +10,17 @@ export default async function NewPriceReportPage({
   const pharmacyId = params.pharmacyId ? Number(params.pharmacyId) : undefined;
 
   return (
-    <div className="mx-auto max-w-md px-4 py-6">
-      <h1 className="text-xl font-semibold">가격 제보하기</h1>
-      <p className="text-muted-foreground mt-1 mb-6 text-sm">
-        약국에서 확인한 실제 판매가를 알려주세요.
-      </p>
-      <PriceReportForm
-        initialPharmacyId={pharmacyId && Number.isFinite(pharmacyId) ? pharmacyId : undefined}
-      />
+    <div className="bg-background flex-1">
+      <div className="border-foreground mx-auto max-w-md border-2 px-5 py-8 sm:my-10 sm:px-8">
+        <p className="text-muted-foreground font-mono text-xs tracking-[0.2em]">PRICE REPORT</p>
+        <h1 className="text-foreground mt-1 text-3xl font-black tracking-tight">가격 제보하기</h1>
+        <p className="text-muted-foreground mt-1 mb-6 text-sm">
+          약국에서 확인한 실제 판매가를 알려주세요.
+        </p>
+        <PriceReportForm
+          initialPharmacyId={pharmacyId && Number.isFinite(pharmacyId) ? pharmacyId : undefined}
+        />
+      </div>
     </div>
   );
 }

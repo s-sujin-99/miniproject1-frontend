@@ -21,18 +21,14 @@ export function PharmacyResultCard({ item, active }: { item: SearchResultItem; a
     <Link
       href={`/pharmacies/${pharmacy.id}`}
       className={cn(
-        'block rounded-lg border p-4 transition-colors',
+        'bg-card block border p-4 transition-colors',
         recommended
-          ? 'border-primary bg-primary/5 ring-primary/30 ring-2 hover:bg-primary/10'
+          ? 'border-primary border-l-4 hover:bg-primary/5'
           : 'border-border hover:bg-muted/50',
         active && !recommended && 'border-primary/60 bg-muted/50',
       )}
     >
-      {recommended && (
-        <span className="bg-primary text-primary-foreground mb-2 inline-block rounded-full px-2 py-0.5 text-xs font-medium">
-          최저가 추천
-        </span>
-      )}
+      {recommended && <span className="rx-tag mb-2">최저가 추천</span>}
 
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
@@ -41,20 +37,22 @@ export function PharmacyResultCard({ item, active }: { item: SearchResultItem; a
             <p className="text-muted-foreground truncate text-xs">{pharmacy.addressRoad}</p>
           )}
         </div>
-        <span className="bg-muted shrink-0 rounded-full px-2 py-0.5 text-xs">
+        <span className="price bg-muted shrink-0 px-2 py-0.5 text-xs">
           {formatDistance(distanceM)}
         </span>
       </div>
 
       <div className="mt-2 flex items-baseline gap-2">
-        <span className="text-xl font-bold">{formatPrice(price.repPrice)}</span>
+        <span className="price text-2xl font-semibold">{formatPrice(price.repPrice)}</span>
         {price.minPrice < price.repPrice && (
-          <span className="text-muted-foreground text-sm">최저 {formatPrice(price.minPrice)}</span>
+          <span className="price text-muted-foreground text-sm">
+            최저 {formatPrice(price.minPrice)}
+          </span>
         )}
       </div>
 
       {price.savingVsCandidateAvg > 0 && (
-        <p className="text-primary mt-1 text-sm">
+        <p className="text-secondary mt-1 text-sm font-medium">
           평균보다 {formatPrice(price.savingVsCandidateAvg)} 저렴
         </p>
       )}
@@ -71,7 +69,7 @@ export function PharmacyResultCard({ item, active }: { item: SearchResultItem; a
           {chipBadges.map((badge) => (
             <span
               key={badge}
-              className="bg-secondary text-secondary-foreground rounded-full px-2 py-0.5 text-xs"
+              className="border-border text-muted-foreground border px-1.5 py-0.5 text-xs"
             >
               {BADGE_LABEL[badge]}
             </span>

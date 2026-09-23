@@ -35,7 +35,7 @@ function DiffCell({ diff }: { diff: number | null }) {
   if (diff === 0) return <span className="text-muted-foreground">평균과 동일</span>;
   const cheaper = diff < 0;
   return (
-    <span className={cheaper ? 'text-primary' : 'text-muted-foreground'}>
+    <span className={cn('price', cheaper ? 'text-secondary' : 'text-muted-foreground')}>
       {cheaper ? '' : '+'}
       {formatPrice(diff)}
     </span>
@@ -60,7 +60,7 @@ export function PharmacyDrugTable({
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border">
+    <div className="bg-card border-border overflow-x-auto border">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b text-left">
@@ -103,7 +103,7 @@ export function PharmacyDrugTable({
                       </div>
                     </div>
                   </td>
-                  <td className="px-3 py-2 font-medium whitespace-nowrap">
+                  <td className="price px-3 py-2 font-semibold whitespace-nowrap">
                     {formatPrice(drug.repPrice)}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">{drug.reportCount}건</td>

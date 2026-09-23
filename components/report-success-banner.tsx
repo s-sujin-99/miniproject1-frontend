@@ -20,7 +20,7 @@ export function ReportSuccessBanner() {
   }
 
   return (
-    <div className="mb-4 flex items-center justify-between gap-2 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-4 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
+    <div className="border-secondary/30 bg-secondary/5 text-secondary mb-4 flex items-center justify-between gap-2 border px-4 py-2.5 text-sm">
       <span className="flex items-center gap-1.5">
         <CheckCircle2 className="size-4 shrink-0" />
         제보해주셔서 감사합니다. 가격 정보가 반영되었습니다.
@@ -28,7 +28,7 @@ export function ReportSuccessBanner() {
       <button
         type="button"
         onClick={dismiss}
-        className="shrink-0 rounded-md p-1 hover:bg-emerald-600/10"
+        className="hover:bg-secondary/10 shrink-0 p-1"
         aria-label="닫기"
       >
         <X className="size-4" />

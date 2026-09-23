@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { apiFetch } from '@/lib/api';
 import { getErrorMessage } from '@/lib/error-message';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 // 백엔드 SignupRequest와 동일한 규칙(shrimp-rules §5.2): 비밀번호 6~64자, 닉네임 2~30자.
 const signupSchema = z.object({
@@ -51,20 +52,22 @@ export default function SignupPage() {
 
   return (
     <>
-      <h1 className="text-xl font-semibold">회원가입</h1>
+      <div>
+        <p className="text-muted-foreground font-mono text-xs tracking-[0.2em]">GET STARTED</p>
+        <h1 className="text-foreground mt-1 text-3xl font-black tracking-tight">회원가입</h1>
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
-          <label htmlFor="email" className="text-sm font-medium">
+          <label htmlFor="email" className="text-foreground text-xs font-bold tracking-wide">
             이메일
           </label>
-          <input
+          <Input
             id="email"
             type="email"
             autoComplete="email"
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? 'email-error' : undefined}
-            className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('email')}
           />
           {errors.email && (
@@ -75,16 +78,15 @@ export default function SignupPage() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="nickname" className="text-sm font-medium">
+          <label htmlFor="nickname" className="text-foreground text-xs font-bold tracking-wide">
             닉네임
           </label>
-          <input
+          <Input
             id="nickname"
             type="text"
             autoComplete="nickname"
             aria-invalid={!!errors.nickname}
             aria-describedby={errors.nickname ? 'nickname-error' : undefined}
-            className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('nickname')}
           />
           {errors.nickname && (
@@ -95,16 +97,15 @@ export default function SignupPage() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="password" className="text-sm font-medium">
+          <label htmlFor="password" className="text-foreground text-xs font-bold tracking-wide">
             비밀번호
           </label>
-          <input
+          <Input
             id="password"
             type="password"
             autoComplete="new-password"
             aria-invalid={!!errors.password}
             aria-describedby={errors.password ? 'password-error' : undefined}
-            className="border-input bg-background h-9 rounded-md border px-3 text-sm"
             {...register('password')}
           />
           {errors.password && (
@@ -127,7 +128,7 @@ export default function SignupPage() {
 
       <p className="text-muted-foreground text-center text-sm">
         이미 계정이 있으신가요?{' '}
-        <Link href="/login" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/login" className="text-foreground font-bold underline underline-offset-4">
           로그인
         </Link>
       </p>
