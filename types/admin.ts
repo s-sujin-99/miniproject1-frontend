@@ -79,3 +79,13 @@ export interface AdminPriceGapRow {
 export interface AdminPriceGapsResponse {
   rows: AdminPriceGapRow[];
 }
+
+// GET /api/v1/admin/stats/top-reporters
+export interface AdminTopReporterRow {
+  reporter: { id: number; nickname: string; email: string };
+  reportCount: number;
+}
+
+export interface AdminTopReportersResponse {
+  rows: AdminTopReporterRow[];
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Receipt } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { ErrorPanel } from '@/components/error-panel';
@@ -47,9 +48,9 @@ function ReceiptThumbnail({ fileId }: { fileId: number }) {
     };
   }, [fileId]);
 
-  if (!url) return <div className="bg-muted size-10 shrink-0 rounded" />;
+  if (!url) return <div className="bg-muted size-10 shrink-0 rounded-xl" />;
   // eslint-disable-next-line @next/next/no-img-element -- 인증이 필요한 blob URL이라 next/image 최적화 대상이 아니다
-  return <img src={url} alt="영수증" className="size-10 shrink-0 rounded object-cover" />;
+  return <img src={url} alt="영수증" className="size-10 shrink-0 rounded-xl object-cover" />;
 }
 
 interface PendingAction {
@@ -101,63 +102,77 @@ export default function AdminReportsPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold">이상치 제보 관리</h1>
+      <h1 className="text-2xl font-bold tracking-tight">이상치 제보 관리</h1>
       <p className="text-muted-foreground mt-1 mb-6 text-sm">
         가격 통계에서 이상치로 표시된 제보입니다. 확인 후 숨기거나 복구할 수 있습니다.
       </p>
 
-      {isLoading ? (
-        <p className="text-muted-foreground text-sm">불러오는 중...</p>
-      ) : reports.length === 0 ? (
-        <EmptyState title="이상치로 표시된 제보가 없습니다" />
-      ) : (
-        <ul className="border-border divide-border divide-y overflow-hidden rounded-lg border">
-          {reports.map((report) => (
-            <li key={report.id} className="flex items-center gap-3 px-4 py-3">
-              {report.receiptFileId ? (
-                <ReceiptThumbnail fileId={report.receiptFileId} />
-              ) : (
-                <div className="bg-muted size-10 shrink-0 rounded" />
-              )}
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">
-                  {report.pharmacy.name} · {report.drug.displayName}
-                </p>
-                <p className="text-muted-foreground truncate text-xs">
-                  {formatPrice(report.price)} · {report.purchasedAt} ·{' '}
-                  {report.reporter
-                    ? `${report.reporter.nickname} (${report.reporter.email})`
-                    : '익명'}
-                </p>
-                {report.flagReason && (
-                  <p className="mt-0.5 text-xs text-amber-600 dark:text-amber-400">
-                    {FLAG_REASON_LABEL[report.flagReason]}
-                  </p>
-                )}
-              </div>
-              <div className="shrink-0">
-                {report.status === 'HIDDEN' ? (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setPending({ report, nextStatus: 'ACTIVE' })}
-                  >
-                    복구
-                  </Button>
+      {/* 제목/설명은 이 밖이라 스크롤에 안 딸려 올라간다. 높이는 admin/layout.tsx의 상한선(1123px)에서
+          이 페이지 제목/설명 높이(실측 80px)를 뺀 값 — 목록이 넘치면 이 영역 안에서만 스크롤된다. */}
+      <div className="max-h-[1043px] overflow-y-auto">
+        {isLoading ? (
+          <p className="text-muted-foreground text-sm">불러오는 중...</p>
+        ) : reports.length === 0 ? (
+          <div className="bg-card rounded-2xl shadow-sm">
+            <EmptyState title="이상치로 표시된 제보가 없습니다" />
+          </div>
+        ) : (
+          <ul className="flex flex-col gap-2">
+            {reports.map((report) => (
+              <li
+                key={report.id}
+                className="bg-card flex items-center gap-3 rounded-2xl p-4 shadow-sm"
+              >
+                {report.receiptFileId ? (
+                  <ReceiptThumbnail fileId={report.receiptFileId} />
                 ) : (
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => setPending({ report, nextStatus: 'HIDDEN' })}
+                  <div
+                    className="bg-muted text-muted-foreground flex size-10 shrink-0 items-center justify-center rounded-xl"
+                    title="영수증 없음"
                   >
-                    숨김
-                  </Button>
+                    <Receipt className="size-4" />
+                  </div>
                 )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">
+                    {report.pharmacy.name} · {report.drug.displayName}
+                  </p>
+                  <p className="text-muted-foreground truncate text-xs">
+                    {formatPrice(report.price)} · {report.purchasedAt} ·{' '}
+                    {report.reporter
+                      ? `${report.reporter.nickname} (${report.reporter.email})`
+                      : '익명'}
+                  </p>
+                  {report.flagReason && (
+                    <span className="mt-1 inline-flex w-fit items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-500/15 dark:text-amber-400">
+                      {FLAG_REASON_LABEL[report.flagReason]}
+                    </span>
+                  )}
+                </div>
+                <div className="shrink-0">
+                  {report.status === 'HIDDEN' ? (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setPending({ report, nextStatus: 'ACTIVE' })}
+                    >
+                      복구
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => setPending({ report, nextStatus: 'HIDDEN' })}
+                    >
+                      숨김
+                    </Button>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
       <Dialog open={pending !== null} onOpenChange={(open) => !open && setPending(null)}>
         <DialogContent>
