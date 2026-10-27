@@ -129,7 +129,7 @@ export default function Home() {
           className="pointer-events-none absolute inset-0 -z-20"
           style={{
             background:
-              'radial-gradient(ellipse 65% 55% at 72% 40%, rgba(255,85,0,0.16), transparent 70%)',
+              'radial-gradient(ellipse 65% 55% at 72% 40%, rgba(255,85,0,0.22), transparent 70%)',
           }}
         />
         <div className="absolute inset-0 -z-10">
@@ -180,7 +180,7 @@ export default function Home() {
               initial="hidden"
               animate="show"
               variants={fadeUp}
-              className="bg-card ring-border pointer-events-auto relative z-20 w-full rounded-full p-1.5 shadow-[0_16px_40px_-16px_rgba(36,31,26,0.25)] ring-1 [&_input]:h-12 [&_input]:rounded-full [&_input]:border-0 [&_input]:bg-transparent [&_input]:text-foreground [&_input:focus-visible]:ring-[3px] [&_input:focus-visible]:ring-primary/40"
+              className="bg-card ring-border pointer-events-auto relative z-20 w-full rounded-full p-1.5 shadow-[0_16px_40px_-16px_rgba(0,0,0,0.5)] ring-1 [&_input]:h-12 [&_input]:rounded-full [&_input]:border-0 [&_input]:bg-transparent [&_input]:text-foreground [&_input:focus-visible]:ring-[3px] [&_input:focus-visible]:ring-primary/40"
             >
               <DrugAutocomplete
                 key={quickQuery}
@@ -239,7 +239,7 @@ export default function Home() {
               whileHover={{ y: -6, scale: 1.02 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-card ring-border rounded-3xl p-6 shadow-[0_12px_30px_-18px_rgba(36,31,26,0.3)] ring-1 transition-shadow hover:shadow-[0_20px_40px_-16px_rgba(255,85,0,0.35)] sm:p-7"
+              className="bg-card ring-border rounded-3xl p-6 shadow-[0_12px_30px_-18px_rgba(0,0,0,0.55)] ring-1 transition-shadow hover:shadow-[0_20px_40px_-16px_rgba(255,85,0,0.35)] sm:p-7"
             >
               <div className="bg-primary text-primary-foreground flex size-11 items-center justify-center rounded-full">
                 <Icon className="size-5" />

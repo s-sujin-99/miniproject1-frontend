@@ -41,7 +41,7 @@ export function ReportGallery() {
           >
             <Link
               href={`/pharmacies/${r.pharmacy.id}`}
-              className="bg-card ring-border hover:ring-primary/40 group block rounded-2xl p-5 shadow-[0_10px_26px_-18px_rgba(36,31,26,0.3)] ring-1 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-18px_rgba(255,85,0,0.35)]"
+              className="bg-card ring-border hover:ring-primary/40 group block rounded-2xl p-5 shadow-[0_10px_26px_-18px_rgba(0,0,0,0.55)] ring-1 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-18px_rgba(255,85,0,0.35)]"
             >
               <span className="text-primary/15 group-hover:text-primary/35 font-mono text-4xl font-black transition-colors">
                 {String(i + 1).padStart(2, '0')}

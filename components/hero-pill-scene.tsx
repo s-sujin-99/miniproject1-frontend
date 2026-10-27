@@ -138,7 +138,7 @@ function FramedPill({ textBottomFraction }: { textBottomFraction: number }) {
         scale={5}
         blur={2.8}
         far={2}
-        color="#241f1a"
+        color="#000000"
       />
     </group>
   );
