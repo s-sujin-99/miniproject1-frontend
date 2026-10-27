@@ -6,6 +6,7 @@ import { apiFetch } from '@/lib/api';
 import { useUserLocation } from '@/hooks/use-user-location';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 import type { RegionGroup } from '@/types/region';
 
 // 위치 권한 거부/타임아웃/미지원 시 폴백 — 시/도 → 시/군/구 2단 선택(ROADMAP T-16, API.md §7).
@@ -60,8 +61,7 @@ export function RegionPicker() {
 
         {data && (
           <div className="flex flex-col gap-3 py-2">
-            <select
-              className="border-input bg-background h-9 rounded-md border px-3 text-sm"
+            <Select
               value={sido}
               onChange={(e) => {
                 setSido(e.target.value);
@@ -74,10 +74,9 @@ export function RegionPicker() {
                   {g.sido}
                 </option>
               ))}
-            </select>
+            </Select>
 
-            <select
-              className="border-input bg-background h-9 rounded-md border px-3 text-sm disabled:opacity-50"
+            <Select
               value={sigunguCode}
               onChange={(e) => setSigunguCode(e.target.value)}
               disabled={!sido}
@@ -89,7 +88,7 @@ export function RegionPicker() {
                   {s.pharmacyCount === 0 ? ' (등록된 약국 없음)' : ''}
                 </option>
               ))}
-            </select>
+            </Select>
 
             <Button onClick={handleConfirm} disabled={!picked}>
               이 지역으로 검색하기

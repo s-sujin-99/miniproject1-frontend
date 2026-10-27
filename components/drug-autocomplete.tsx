@@ -15,8 +15,9 @@ interface DrugAutocompleteProps {
   initialQuery?: string;
 }
 
-// ROADMAP T-17 — 입력마다 호출하면 서버가 시끄러워 300ms 디바운스로 묶는다.
-const DEBOUNCE_MS = 300;
+// ROADMAP T-17 — 입력마다 호출하면 서버가 시끄러워 디바운스로 묶는다. 실측 응답이 ~70ms라
+// 150ms면 서버 부담 없이도 체감 지연을 절반 가까이 줄일 수 있다.
+const DEBOUNCE_MS = 150;
 
 export function DrugAutocomplete({
   onSelect,

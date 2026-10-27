@@ -38,16 +38,16 @@ export default async function PharmacyDetailPage({ params }: { params: Promise<{
         </Suspense>
 
         <div className="lg:grid lg:grid-cols-[320px_1fr] lg:items-start lg:gap-6">
-          <div className="border-border bg-card mb-6 border p-5 lg:sticky lg:top-20 lg:mb-0 sm:p-6">
+          <div className="border-border bg-card mb-6 rounded-2xl border p-5 shadow-[0_10px_26px_-18px_rgba(0,0,0,0.6)] lg:sticky lg:top-20 lg:mb-0 sm:p-6">
             {pharmacy.photoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element -- 외부 사진 출처 도메인이 아직 정해지지 않아 next/image remotePatterns를 걸 수 없다.
               <img
                 src={pharmacy.photoUrl}
                 alt={`${pharmacy.name} 대표 사진`}
-                className="border-border mb-4 h-40 w-full border object-cover"
+                className="border-border mb-4 h-40 w-full rounded-xl border object-cover"
               />
             ) : (
-              <div className="bg-muted text-muted-foreground border-border mb-4 flex h-40 w-full items-center justify-center border">
+              <div className="bg-muted text-muted-foreground border-border mb-4 flex h-40 w-full items-center justify-center rounded-xl border">
                 <Store className="size-10" aria-hidden />
               </div>
             )}
@@ -91,7 +91,7 @@ export default async function PharmacyDetailPage({ params }: { params: Promise<{
           </div>
 
           <div className="min-w-0">
-            <p className="text-muted-foreground font-mono text-xs tracking-[0.2em]">PRICE LIST</p>
+            <p className="text-primary font-mono text-xs tracking-[0.2em]">PRICE LIST</p>
             <h2 className="text-foreground mt-1 mb-4 text-xl font-black tracking-tight">
               취급 약품 가격
             </h2>

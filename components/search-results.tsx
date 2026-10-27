@@ -4,8 +4,8 @@ import { PharmacyResultCard } from '@/components/pharmacy-result-card';
 import { usePharmacySearch } from '@/lib/pharmacy-search-context';
 import type { SearchResultItem } from '@/types/search';
 
-// ROADMAP T-22 — 지도(search-map-panel)가 화면 상단으로 옮겨지면서 목록은 항상 전체 폭 1열이다.
-// hover/click 상태는 PharmacySearchProvider(컨텍스트)로 지도와 공유한다.
+// ROADMAP T-22 — lg 이상에서는 지도(search-map-panel)가 오른쪽 sticky 패널로 붙고 이 목록이
+// 왼쪽 컬럼을 스크롤한다. hover/click 상태는 PharmacySearchProvider(컨텍스트)로 지도와 공유한다.
 export function SearchResults({ results }: { results: SearchResultItem[] }) {
   const { activeId, setActiveId, registerItemRef } = usePharmacySearch();
 

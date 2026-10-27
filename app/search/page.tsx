@@ -68,61 +68,77 @@ export default async function SearchPage({
 
   return (
     <PharmacySearchProvider>
-      <div className="mx-auto max-w-5xl px-4 py-6">
-        {results.length > 0 && (
-          <div className="mb-4">
-            <SearchMapPanel
-              center={{ lat: data.query.lat, lng: data.query.lng }}
-              results={results}
-            />
-          </div>
-        )}
-
-        <div className="mb-4">
-          <h1 className="text-xl font-semibold">{drug.displayName}</h1>
-          <p className="text-muted-foreground text-sm">
-            반경 {formatDistance(Number(radius))} 내 {summary.resultCount}곳
-            {summary.maxSaving != null && summary.maxSaving > 0 && (
-              <> · 최대 {formatPrice(summary.maxSaving)} 절약 가능</>
-            )}
-          </p>
-        </div>
-
-        {(dataSource === 'SEED' || dataSource === 'MIXED') && (
-          <div className="bg-muted text-muted-foreground mb-4 rounded-lg px-4 py-2 text-xs">
-            이 결과에는 학습용 예시 데이터가 포함되어 있습니다.
-          </div>
-        )}
-
-        <SortToggle current={current} />
-
-        {results.length === 0 ? (
-          <div className="mt-8">
-            <EmptyState
-              title="반경 내에 결과가 없습니다"
-              description={
-                suggestion
-                  ? `반경을 ${formatDistance(suggestion.recommendedRadius)}로 넓히면 ${suggestion.estimatedCount}곳이 있습니다.`
-                  : '다른 조건으로 다시 검색해보세요.'
-              }
-            />
-            {suggestion && (
-              <div className="mt-4 flex justify-center">
-                <Button asChild>
-                  <Link
-                    href={buildSearchUrl(current, {
-                      radius: String(suggestion.recommendedRadius),
-                    })}
-                  >
-                    반경 {formatDistance(suggestion.recommendedRadius)}로 넓히기
-                  </Link>
-                </Button>
+      <div className="flex-1">
+        <div className="mx-auto max-w-7xl px-6 py-6">
+          <div className="lg:grid lg:grid-cols-[1fr_400px] lg:items-start lg:gap-6">
+            {results.length > 0 && (
+              // 모바일: 상단 전체 폭 배너. lg+: 오른쪽 sticky 패널로 재배치(order만 바뀔 뿐
+              // DOM 순서는 그대로라 지도가 먼저 읽힌다).
+              <div className="mb-4 h-64 md:h-80 lg:order-2 lg:sticky lg:top-20 lg:mb-0 lg:h-[calc(100vh-6rem)]">
+                <SearchMapPanel
+                  center={{ lat: data.query.lat, lng: data.query.lng }}
+                  results={results}
+                />
               </div>
             )}
+
+            <div className="min-w-0 lg:order-1">
+              <div className="mb-4">
+                <h1 className="text-foreground text-2xl font-black tracking-tight">
+                  {drug.displayName}
+                </h1>
+                <p className="text-muted-foreground text-sm">
+                  반경 {formatDistance(Number(radius))} 내 {summary.resultCount}곳
+                  {summary.maxSaving != null && summary.maxSaving > 0 && (
+                    <>
+                      {' · 최대 '}
+                      <span className="price text-secondary font-semibold">
+                        {formatPrice(summary.maxSaving)}
+                      </span>
+                      {' 절약 가능'}
+                    </>
+                  )}
+                </p>
+              </div>
+
+              {(dataSource === 'SEED' || dataSource === 'MIXED') && (
+                <div className="bg-accent text-accent-foreground border-border mb-4 border px-4 py-2.5 text-xs">
+                  이 결과에는 학습용 예시 데이터가 포함되어 있습니다.
+                </div>
+              )}
+
+              <SortToggle current={current} />
+
+              {results.length === 0 ? (
+                <div className="mt-8">
+                  <EmptyState
+                    title="반경 내에 결과가 없습니다"
+                    description={
+                      suggestion
+                        ? `반경을 ${formatDistance(suggestion.recommendedRadius)}로 넓히면 ${suggestion.estimatedCount}곳이 있습니다.`
+                        : '다른 조건으로 다시 검색해보세요.'
+                    }
+                  />
+                  {suggestion && (
+                    <div className="mt-4 flex justify-center">
+                      <Button asChild>
+                        <Link
+                          href={buildSearchUrl(current, {
+                            radius: String(suggestion.recommendedRadius),
+                          })}
+                        >
+                          반경 {formatDistance(suggestion.recommendedRadius)}로 넓히기
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <SearchResults results={results} />
+              )}
+            </div>
           </div>
-        ) : (
-          <SearchResults results={results} />
-        )}
+        </div>
       </div>
     </PharmacySearchProvider>
   );

@@ -4,9 +4,10 @@ import { MapPin, LocateFixed } from 'lucide-react';
 import { useUserLocation } from '@/hooks/use-user-location';
 import { Button } from '@/components/ui/button';
 
-// 헤더에 현재 위치 출처(GPS/지역)를 표시하고, 클릭하면 지역 선택 모달을 다시 연다(ROADMAP T-16).
+// 헤더에 현재 위치 출처(GPS/지역)를 표시하고, 클릭하면 GPS로 현재 위치를 다시 찾는다 — 실패하면
+// requestLocation 내부에서 지역 선택 모달로 자동 폴백한다(ROADMAP T-16).
 export function LocationIndicator() {
-  const { state, openPicker } = useUserLocation();
+  const { state, requestLocation } = useUserLocation();
 
   const label = (() => {
     switch (state.status) {
@@ -28,7 +29,12 @@ export function LocationIndicator() {
     <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
       <MapPin className="size-3.5" aria-hidden />
       <span>{label}</span>
-      <Button variant="ghost" size="icon-xs" onClick={openPicker} aria-label="위치 변경">
+      <Button
+        variant="ghost"
+        size="icon-xs"
+        onClick={requestLocation}
+        aria-label="현재 위치로 새로고침"
+      >
         <LocateFixed className="size-3" />
       </Button>
     </div>

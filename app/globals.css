@@ -48,78 +48,77 @@
   --radius-4xl: calc(var(--radius) * 2.5);
 }
 
-/* "물가 시세표(ledger)" 컨셉 — 장식(그라디언트/점선 배지/텍스처)을 걷어내고 흑백 종이 위에
-   단일 잉크레드만 남긴다. 모서리는 거의 각지고(radius 0에 가깝게), 그림자 대신 헤어라인 룰로
-   구획을 나눈다. secondary(그린)는 "절약폭" 숫자 같은 실데이터 신호에만 쓴다. */
+/* 웜 크림 + 오렌지 포인트 컨셉(soijeong.com 레퍼런스 — 딥블랙 무대가 아니라 크림 배경 위
+   화이트 카드와 채도 높은 오렌지 블록). 토큰 하나(:root)만 바꾸면 이 값을 참조하는 모든 페이지
+   (검색·약국상세·로그인·제보·관리자)가 함께 전환된다 — 홈만 따로 하드코딩된 팔레트를 쓰던
+   이전 상태(app/page.tsx, report-gallery.tsx, hero-pill-scene.tsx)는 이 값에 맞춰 직접 맞춰준다. */
 :root {
-  --background: #f6f6f3;
-  --foreground: #121212;
+  --background: #fbf4e9;
+  --foreground: #241f1a;
   --card: #ffffff;
-  --card-foreground: #121212;
+  --card-foreground: #241f1a;
   --popover: #ffffff;
-  --popover-foreground: #121212;
-  /* primary/accent/ring은 의도적으로 흑백이다 — "빨강 = 브랜드 장식"을 없애고, 빨강은
-     destructive(에러) 딱 한 곳에만 남긴다. 초록(secondary)은 절약폭 등 실데이터 신호라 그대로 둔다. */
-  --primary: #121212;
-  --primary-foreground: #f6f6f3;
-  --secondary: #1f6b4a;
-  --secondary-foreground: #eef7f1;
-  --muted: #ececea;
-  --muted-foreground: #63615c;
-  --accent: #e4e3de;
-  --accent-foreground: #121212;
-  --destructive: #a3231d;
-  --border: #d8d6d0;
-  --input: #d8d6d0;
-  --ring: #12121280;
-  --chart-1: #121212;
-  --chart-2: #1f6b4a;
-  --chart-3: #8a8a83;
-  --chart-4: #63615c;
-  --chart-5: #3a3a38;
-  --radius: 0.125rem;
-  --sidebar: #efeeea;
-  --sidebar-foreground: #121212;
-  --sidebar-primary: #121212;
-  --sidebar-primary-foreground: #f6f6f3;
-  --sidebar-accent: #e4e3de;
-  --sidebar-accent-foreground: #121212;
-  --sidebar-border: #d8d6d0;
-  --sidebar-ring: #12121280;
+  --popover-foreground: #241f1a;
+  --primary: #ff5500;
+  --primary-foreground: #ffffff;
+  --secondary: #1e8f5a;
+  --secondary-foreground: #ffffff;
+  --muted: #f1e4cf;
+  --muted-foreground: #8b7c66;
+  --accent: #ffe1c7;
+  --accent-foreground: #d14700;
+  --destructive: #d9432a;
+  --border: #e6d8be;
+  --input: #e6d8be;
+  --ring: #ff550080;
+  --chart-1: #ff5500;
+  --chart-2: #1e8f5a;
+  --chart-3: #8b7c66;
+  --chart-4: #c99a4a;
+  --chart-5: #6b5b45;
+  --radius: 0.85rem;
+  --sidebar: #f6ead3;
+  --sidebar-foreground: #241f1a;
+  --sidebar-primary: #ff5500;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ffe1c7;
+  --sidebar-accent-foreground: #d14700;
+  --sidebar-border: #e6d8be;
+  --sidebar-ring: #ff550080;
 }
 
 .dark {
-  --background: #101010;
-  --foreground: #f2f0ec;
-  --card: #171717;
-  --card-foreground: #f2f0ec;
-  --popover: #171717;
-  --popover-foreground: #f2f0ec;
-  --primary: #f2f0ec;
-  --primary-foreground: #101010;
-  --secondary: #34b17e;
-  --secondary-foreground: #04140d;
-  --muted: #1e1e1e;
-  --muted-foreground: #a3a19b;
-  --accent: #232322;
-  --accent-foreground: #f2f0ec;
-  --destructive: #ff6b5e;
-  --border: #2c2c2a;
-  --input: #2c2c2a;
-  --ring: #f2f0ec80;
-  --chart-1: #f2f0ec;
-  --chart-2: #34b17e;
-  --chart-3: #a3a19b;
-  --chart-4: #8a8880;
-  --chart-5: #6b6b68;
-  --sidebar: #161616;
-  --sidebar-foreground: #f2f0ec;
-  --sidebar-primary: #f2f0ec;
-  --sidebar-primary-foreground: #101010;
-  --sidebar-accent: #232322;
-  --sidebar-accent-foreground: #f2f0ec;
-  --sidebar-border: #2c2c2a;
-  --sidebar-ring: #f2f0ec80;
+  --background: #fbf4e9;
+  --foreground: #241f1a;
+  --card: #ffffff;
+  --card-foreground: #241f1a;
+  --popover: #ffffff;
+  --popover-foreground: #241f1a;
+  --primary: #ff5500;
+  --primary-foreground: #ffffff;
+  --secondary: #1e8f5a;
+  --secondary-foreground: #ffffff;
+  --muted: #f1e4cf;
+  --muted-foreground: #8b7c66;
+  --accent: #ffe1c7;
+  --accent-foreground: #d14700;
+  --destructive: #d9432a;
+  --border: #e6d8be;
+  --input: #e6d8be;
+  --ring: #ff550080;
+  --chart-1: #ff5500;
+  --chart-2: #1e8f5a;
+  --chart-3: #8b7c66;
+  --chart-4: #c99a4a;
+  --chart-5: #6b5b45;
+  --sidebar: #f6ead3;
+  --sidebar-foreground: #241f1a;
+  --sidebar-primary: #ff5500;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ffe1c7;
+  --sidebar-accent-foreground: #d14700;
+  --sidebar-border: #e6d8be;
+  --sidebar-ring: #ff550080;
 }
 
 @layer base {
@@ -131,6 +130,14 @@
   }
   html {
     @apply font-sans;
+  }
+  /* 브라우저 자동완성이 강제하는 밝은 배경을 카드 색으로 덮어써 다크 폼에서도 깨지지 않게 한다. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--foreground);
+    box-shadow: 0 0 0 1000px var(--card) inset;
+    transition: background-color 9999s ease-in-out 0s;
   }
 }
 
@@ -148,17 +155,18 @@
   }
 }
 
-/* 가격표 스탬프 태그 — 각진 실사각형에 색을 꽉 채운다(점선 배지/알약 모양 금지, 시세표 표찰 느낌). */
+/* 가격 강조 배지 — 홈 히어로의 "PRICE INDEX" 알약(pill) 배지와 같은 모양 언어로 통일한다. */
 @utility rx-tag {
   display: inline-flex;
   align-items: center;
+  border-radius: 999px;
   font-family: var(--font-mono);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.01em;
   color: var(--primary-foreground);
   background: var(--primary);
-  padding: 0.2rem 0.55rem;
+  padding: 0.25rem 0.7rem;
 }
 
 /* 필름 그레인 — WebGL 셰이더 없이 순수 CSS로. 히어로처럼 "한 번만 확실히" 쓰는 자리에만 붙인다

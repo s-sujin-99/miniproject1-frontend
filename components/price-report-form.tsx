@@ -247,7 +247,7 @@ export function PriceReportForm({ initialPharmacyId }: PriceReportFormProps) {
                   placeholder="예: 2,800"
                   aria-invalid={!!errors.price}
                   aria-describedby={errors.price ? 'price-error' : undefined}
-                  className="border-input bg-background focus-visible:ring-ring/50 h-11 w-full rounded-lg border px-4 pr-8 text-sm outline-none focus-visible:ring-3 aria-invalid:border-destructive"
+                  className="price border-input bg-background focus-visible:ring-ring/50 h-11 w-full rounded-sm border px-4 pr-8 text-base font-semibold outline-none focus-visible:ring-3 aria-invalid:border-destructive"
                   value={field.value}
                   onBlur={field.onBlur}
                   onChange={(e) => {

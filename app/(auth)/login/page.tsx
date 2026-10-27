@@ -42,7 +42,7 @@ function LoginForm() {
     }
   }
 
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  // const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   return (
     <>
@@ -101,14 +101,14 @@ function LoginForm() {
         </Button>
       </form>
 
-      {apiBaseUrl && (
+      {/* {apiBaseUrl && (
         <a
           href={`${apiBaseUrl}/oauth2/authorization/google`}
           className="border-border bg-background hover:bg-muted flex h-11 items-center justify-center border text-sm font-medium transition-colors"
         >
           Google로 로그인
         </a>
-      )}
+      )} */}
 
       <p className="text-muted-foreground text-center text-sm">
         계정이 없으신가요?{' '}

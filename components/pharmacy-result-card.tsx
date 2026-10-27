@@ -21,10 +21,10 @@ export function PharmacyResultCard({ item, active }: { item: SearchResultItem; a
     <Link
       href={`/pharmacies/${pharmacy.id}`}
       className={cn(
-        'bg-card block border p-4 transition-colors',
+        'bg-card block rounded-2xl border p-4 shadow-[0_10px_26px_-18px_rgba(0,0,0,0.6)] transition-all hover:-translate-y-0.5',
         recommended
-          ? 'border-primary border-l-4 hover:bg-primary/5'
-          : 'border-border hover:bg-muted/50',
+          ? 'border-primary/60 shadow-[0_16px_34px_-16px_rgba(255,85,0,0.45)] hover:bg-primary/5'
+          : 'border-border hover:border-primary/40 hover:bg-muted/50',
         active && !recommended && 'border-primary/60 bg-muted/50',
       )}
     >
@@ -37,7 +37,7 @@ export function PharmacyResultCard({ item, active }: { item: SearchResultItem; a
             <p className="text-muted-foreground truncate text-xs">{pharmacy.addressRoad}</p>
           )}
         </div>
-        <span className="price bg-muted shrink-0 px-2 py-0.5 text-xs">
+        <span className="price bg-muted shrink-0 rounded-full px-2.5 py-0.5 text-xs">
           {formatDistance(distanceM)}
         </span>
       </div>
@@ -69,7 +69,7 @@ export function PharmacyResultCard({ item, active }: { item: SearchResultItem; a
           {chipBadges.map((badge) => (
             <span
               key={badge}
-              className="border-border text-muted-foreground border px-1.5 py-0.5 text-xs"
+              className="border-border text-muted-foreground rounded-full border px-2 py-0.5 text-xs"
             >
               {BADGE_LABEL[badge]}
             </span>

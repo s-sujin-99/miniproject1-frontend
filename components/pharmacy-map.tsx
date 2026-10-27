@@ -7,9 +7,9 @@ import type { SearchResultItem } from '@/types/search';
 
 const KAKAO_MAP_KEY = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY;
 
-const COLOR_RECOMMENDED = '#059669';
-const COLOR_DEFAULT = '#6b7280';
-const COLOR_USER = '#3b82f6';
+const COLOR_RECOMMENDED = '#c8161d';
+const COLOR_DEFAULT = '#8a8a83';
+const COLOR_USER = '#121212';
 
 // 결과가 몇 건이든 지도는 항상 반경 500m 정도의 주변 지역이 보이게 고정한다.
 const VIEW_RADIUS_M = 500;
@@ -35,9 +35,9 @@ function pinImage(color: string, size: number): kakao.maps.MarkerImage {
 
 function overlayContent(price: number, recommended: boolean): string {
   const bg = recommended ? COLOR_RECOMMENDED : '#ffffff';
-  const color = recommended ? '#ffffff' : '#111827';
-  const border = recommended ? 'none' : '1px solid #d1d5db';
-  return `<div style="background:${bg};color:${color};border:${border};border-radius:9999px;padding:2px 8px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,0.15);transform:translateY(-4px);">${formatPrice(price)}</div>`;
+  const color = recommended ? '#fdf6f2' : '#121212';
+  const border = recommended ? COLOR_RECOMMENDED : '#d8d6d0';
+  return `<div style="background:${bg};color:${color};border:1px solid ${border};padding:2px 7px;font-family:'Pretendard',sans-serif;font-variant-numeric:tabular-nums;font-size:12px;font-weight:700;white-space:nowrap;transform:translateY(-4px);">${formatPrice(price)}</div>`;
 }
 
 interface MarkerEntry {
@@ -156,7 +156,7 @@ export function PharmacyMap({ center, results, activeId, onMarkerClick }: Pharma
         onLoad={handleLoad}
         onError={handleError}
       />
-      <div ref={containerRef} className="bg-muted h-64 w-full rounded-lg md:h-80" />
+      <div ref={containerRef} className="bg-muted border-border h-full w-full border" />
     </>
   );
 }

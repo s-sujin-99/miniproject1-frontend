@@ -29,6 +29,7 @@ export interface PharmacyDetail {
   lat: number;
   lng: number;
   phone: string | null;
+  photoUrl: string | null;
   businessHours: BusinessHours | null;
   distanceM: number | null;
   region: PharmacyRegion | null;
