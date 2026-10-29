@@ -40,6 +40,15 @@ const UserLocationContext = createContext<UserLocationContextValue | null>(null)
 const STORAGE_KEY = 'pharmaprice:user-location';
 const GEOLOCATION_OPTIONS: PositionOptions = { enableHighAccuracy: false, timeout: 8000 };
 
+// 위치를 못 얻으면 모달 대신 가격 제보가 가장 많은 지역(시드 기준 서울 강남구, 5,515건)으로 바로 검색한다.
+const DEFAULT_REGION: SelectedRegion = {
+  code: '110001',
+  sido: '서울특별시',
+  sigungu: '강남구',
+  centerLat: 37.50401065284703,
+  centerLng: 127.04665461761553,
+};
+
 function readCachedLocation(): LocationState | null {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -95,13 +104,22 @@ export function UserLocationProvider({ children }: { children: React.ReactNode }
   const [state, setState] = useState<LocationState>({ status: 'idle' });
   const [isPickerOpen, setPickerOpen] = useState(false);
 
-  const handleResolved = useCallback((next: LocationState) => {
+  const handleResolved = useCallback((resolved: LocationState) => {
+    const next: LocationState =
+      resolved.status === 'denied' || resolved.status === 'unavailable'
+        ? {
+            status: 'fallback',
+            lat: DEFAULT_REGION.centerLat,
+            lng: DEFAULT_REGION.centerLng,
+            regionCode: DEFAULT_REGION.code,
+            sido: DEFAULT_REGION.sido,
+            sigungu: DEFAULT_REGION.sigungu,
+          }
+        : resolved;
     setState(next);
     if (next.status === 'granted' || next.status === 'fallback') {
       persistLocation(next);
       setPickerOpen(false);
-    } else if (next.status === 'denied' || next.status === 'unavailable') {
-      setPickerOpen(true);
     }
   }, []);
 

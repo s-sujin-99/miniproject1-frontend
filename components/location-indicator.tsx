@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 // 헤더에 현재 위치 출처(GPS/지역)를 표시하고, 클릭하면 GPS로 현재 위치를 다시 찾는다 — 실패하면
 // requestLocation 내부에서 지역 선택 모달로 자동 폴백한다(ROADMAP T-16).
 export function LocationIndicator() {
-  const { state, requestLocation } = useUserLocation();
+  const { state, requestLocation, openPicker } = useUserLocation();
 
   const label = (() => {
     switch (state.status) {
@@ -28,7 +28,10 @@ export function LocationIndicator() {
   return (
     <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
       <MapPin className="size-3.5" aria-hidden />
-      <span>{label}</span>
+      {/* GPS 실패 시 기본 지역으로 자동 설정되므로, 다른 지역은 여기서 직접 고른다. */}
+      <button type="button" onClick={openPicker} className="hover:text-foreground">
+        {label}
+      </button>
       <Button
         variant="ghost"
         size="icon-xs"
